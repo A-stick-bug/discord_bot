@@ -4,7 +4,7 @@ from replit import db
 import os  # default module
 from dotenv import load_dotenv
 import keep_alive
-
+ 
 # imports from other files
 import encryption
 from word_search import solve
