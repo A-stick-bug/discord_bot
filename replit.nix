@@ -1,7 +1,10 @@
 { pkgs }: {
   deps = [
-		pkgs.nodePackages.prettier
+	pkgs.nodePackages.prettier
     pkgs.python38Full
+    pkgs.python38Full
+    pkgs.chromium
+    pkgs.chromedriver
   ];
   env = {
     PYTHON_LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [

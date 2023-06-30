@@ -16,7 +16,7 @@ def update_user_stats(user):
         db[user]["previous_time"] = time
 
     # daily weather api requests limit for regular users
-    elif db[user]["weather"] > 3 and user not in db["unlimited_api"]:
+    elif db[user]["weather"] > 500 and user not in db["unlimited_api"]:
         if not db[user]["limit_exceeded"] or db[user]["limit_exceeded"][-1] != time:
             db[user]["limit_exceeded"].append(time)
         return "limit exceeded"

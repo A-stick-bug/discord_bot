@@ -38,5 +38,3 @@ def update_sun_data():
     plt.savefig('sun_data.png')
     plt.close()
     
-
-    

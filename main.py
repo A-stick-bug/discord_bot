@@ -12,6 +12,7 @@ from nasa import fetch_pic, date_changer
 from space_others import update_sun_data
 from weather import get_current_weather, update_today_weather
 from api_limit import update_user_stats
+import msn_weather
 
 load_dotenv()  # load all the variables from the env file
 token = str(os.getenv("TOKEN"))
@@ -184,6 +185,59 @@ async def weather_today(ctx, location: discord.Option(
 
 
 @bot.slash_command(
+    name="msn_weather",
+    description="Get weather data provided by Microsoft")
+async def get_msn_weather(ctx, location: discord.Option(
+    str, "Input a city name with its province or country name")):
+
+    await ctx.respond("Retrieving MSN weather data...")
+    user = str(ctx.author.id)
+    if update_user_stats(user) == "limit exceeded":
+        await ctx.respond(
+            "You have used weather commands too often today. Do not spam commands and try again tomorrow.",
+            ephemeral=True)
+        return
+
+    try:
+        today_weather = msn_weather.update_msn_weather(location)
+        await ctx.respond(today_weather,
+                          file=discord.File('msn_weather.png'))
+
+    except Exception as e:
+        print(f"An error occured in the msn_weather command: {e}")
+        await ctx.respond(
+            "An error has occured when fetching weather data. If you entered a valid city name, try being more specific by also entering the province/country that the city is in.",
+            ephemeral=True)
+
+
+@bot.slash_command(
+    name="weather_graph",
+    description="Get the temperature and precipitation for the next 24h, provided by Microsoft")
+async def weather_graph(ctx, location: discord.Option(
+    str, "Input a city name with its province or country name")):
+
+    await ctx.respond("Retrieving weather graph...")
+    user = str(ctx.author.id)
+    if update_user_stats(user) == "limit exceeded":
+        await ctx.respond(
+            "You have used weather commands too often today. Do not spam commands and try again tomorrow.",
+            ephemeral=True)
+        return
+
+    try:
+        today_weather = msn_weather.update_weather_graph(location)
+        await ctx.respond(today_weather,
+                          file=discord.File('msn_weather_graph.png'))
+
+    except Exception as e:
+        print(f"An error occured in the weather_graph command: {e}")
+        await ctx.respond(
+            "An error has occured when fetching weather data. If you entered a valid city name, try being more specific by also entering the province/country that the city is in.",
+            ephemeral=True)
+
+
+
+@bot.slash_command(
     name="apod",
     description="Fetch the Astronomy Picture of the Day with its description")
 async def get_apod(ctx, date: discord.Option(
@@ -191,7 +245,8 @@ async def get_apod(ctx, date: discord.Option(
     "Find the APOD from a specific date in YYYY-MM-DD format",
     required=False,
     default='')):
-
+        
+    await ctx.respond("Fetching apod...")
     try:
         data, date = await fetch_pic(date)
         Apod_view = Buttons(ctx.author.id, date)
