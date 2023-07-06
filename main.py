@@ -200,7 +200,7 @@ async def get_msn_weather(ctx, location: discord.Option(
 
     try:
         today_weather = msn_weather.update_msn_weather(location)
-        await ctx.respond(today_weather,
+        await ctx.respond("## Weather in "+today_weather,
                           file=discord.File('msn_weather.png'))
 
     except Exception as e:
@@ -226,7 +226,7 @@ async def weather_graph(ctx, location: discord.Option(
 
     try:
         today_weather = msn_weather.update_weather_graph(location)
-        await ctx.respond(today_weather,
+        await ctx.respond("## Weather in "+ today_weather,
                           file=discord.File('msn_weather_graph.png'))
 
     except Exception as e:

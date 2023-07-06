@@ -13,6 +13,7 @@ def update_msn_weather(location):
 
     # Navigate to the webpage
     driver.get(f'https://www.msn.com/en-ca/weather/forecast/in-{location}')
+    loc = driver.execute_script("return document.querySelector('#WeatherOverviewLocationName a').textContent")
 
     driver.save_screenshot("msn_weather.png")
     driver.quit()
@@ -21,8 +22,7 @@ def update_msn_weather(location):
     crop_box = (30, 230, 636, 494)
     cropped_image = image.crop(crop_box)
     cropped_image.save("msn_weather.png")
-
-    return "Successfully retrieved weather data"
+    return loc
 
 
 def update_weather_graph(location):
@@ -34,10 +34,11 @@ def update_weather_graph(location):
 
     # Navigate to the webpage
     driver.get(f'https://www.msn.com/en-ca/weather/forecast/in-{location}')
+    loc = driver.execute_script("return document.querySelector('#WeatherOverviewLocationName a').textContent")
       
     driver.execute_script("document.body.style.zoom='150%'")
     driver.execute_script("window.scrollBy(0, 2000)")
-    time.sleep(3)
+    time.sleep(6)
     driver.save_screenshot("msn_weather_graph.png")
     driver.quit()
     
@@ -45,8 +46,8 @@ def update_weather_graph(location):
     crop_box = (11, 369, 1375, 784)
     cropped_image = image.crop(crop_box)
     cropped_image.save('msn_weather_graph.png')
-
-    return "Successfully retrieved weather data"
+    
+    return loc
 
 
 if __name__ == '__main__':
